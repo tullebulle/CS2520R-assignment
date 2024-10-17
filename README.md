@@ -1,11 +1,3 @@
----
-author:
-- Ulrik Unneberg
-title: Simply-Typed Lambda Calculus (STLC) with extensions
----
-
-<!-- Use MathJax -->
-
 # Introduction
 
 This report presents the design and implementation of the **Simply-Typed
@@ -38,13 +30,18 @@ the repository.
 
 # Syntax
 
-We have the expressions in the STLC with as $$\begin{aligned}
-    t &::= x \mid \lambda x: T. t \mid t_1 \ t_2 \mid \text{if } t_1 \ \text{then} \ t_2 \ \text{else} \ t_3 \\
-      &\mid \langle t_1, t_2 \rangle \mid \text{fst}(t) \mid \text{snd}(t) \\
-      &\mid \text{inl}_{A \lor B}(t) \mid \text{inr}_{A \lor B}(t) \mid \text{case } t \ \text{of} \ (\text{inl}_{A \lor B}(x) \Rightarrow t_1 \mid \text{inr}_{A \lor B}(y) \Rightarrow t_2),
-\end{aligned}$$ and the types as $$\begin{aligned}
-    T &::= \text{Int} \mid \text{Bool} \mid T_1 \to T_2 \mid T_1 \land T_2 \mid T_1 \lor T_2
-\end{aligned}$$
+We have the expressions in the STLC with as
+
+$$
+    t ::= x \mid \lambda x: T. t \mid t_1 \ t_2 \mid \text{if } t_1 \ \text{then} \ t_2 \ \text{else} \ t_3 \\
+      \mid \langle t_1, t_2 \rangle \mid \text{fst}(t) \mid \text{snd}(t) \\
+      \mid \text{inl}_{A \lor B}(t) \mid \text{inr}_{A \lor B}(t) \mid \text{case } t \ \text{of} \ (\text{inl}_{A \lor B}(x) \Rightarrow t_1 \mid \text{inr}_{A \lor B}(y) \Rightarrow t_2),
+$$
+
+ and the types as 
+ $$
+    T ::= \text{Int} \mid \text{Bool} \mid T_1 \to T_2 \mid T_1 \land T_2 \mid T_1 \lor T_2
+$$
 
 # Type System
 
@@ -53,41 +50,42 @@ well-typed, and is presented in the following.
 
 ## Function Types
 
-$$\inferrule*[right=Abs]
-    {\Gamma, x : A \vdash t : B}
-    {\Gamma \vdash \lambda x: A. t : A \to B}$$
+$$
+\frac{\Gamma, x : A \vdash t : B}{\Gamma \vdash \lambda x: A. t : A \to B} \quad \text{Abs}
+$$
 
-$$\inferrule*[right=App]
-    {\Gamma \vdash t_1 : A \to B \quad \Gamma \vdash t_2 : A}
-    {\Gamma \vdash t_1 \ t_2 : B}$$
+$$
+\frac{\Gamma \vdash t_1 : A \to B \quad \Gamma \vdash t_2 : A}{\Gamma \vdash t_1 \ t_2 : B} \quad \text{App}
+$$
 
 ## Conjunction Types
 
-$$\inferrule*[right=Pair]
-    {\Gamma \vdash t_1 : A \quad \Gamma \vdash t_2 : B}
-    {\Gamma \vdash \langle t_1, t_2 \rangle : A \land B}$$
+$$
+\frac{\Gamma \vdash t_1 : A \quad \Gamma \vdash t_2 : B}{\Gamma \vdash \langle t_1, t_2 \rangle : A \land B} \quad \text{Pair}
+$$
 
-$$\inferrule*[right=Fst]
-    {\Gamma \vdash t : A \land B}
-    {\Gamma \vdash \text{fst}(t) : A}$$
+$$
+\frac{\Gamma \vdash t : A \land B}{\Gamma \vdash \text{fst}(t) : A} \quad \text{Fst}
+$$
 
-$$\inferrule*[right=Snd]
-    {\Gamma \vdash t : A \land B}
-    {\Gamma \vdash \text{snd}(t) : B}$$
+$$
+\frac{\Gamma \vdash t : A \land B}{\Gamma \vdash \text{snd}(t) : B} \quad \text{Snd}
+$$
 
 ## Disjunction Types
 
-$$\inferrule*[right=Inl]
-    {\Gamma \vdash t : A}
-    {\Gamma \vdash \text{inl}_{A \lor B}(t) : A \lor B}$$
+$$
+\frac{\Gamma \vdash t : A}{\Gamma \vdash \text{inl}_{A \lor B}(t) : A \lor B} \quad \text{Inl}
+$$
 
-$$\inferrule*[right=Inr]
-    {\Gamma \vdash t : B}
-    {\Gamma \vdash \text{inr}_{A \lor B}(t) : A \lor B}$$
+$$
+\frac{\Gamma \vdash t : B}{\Gamma \vdash \text{inr}_{A \lor B}(t) : A \lor B} \quad \text{Inr}
+$$
 
-$$\inferrule*[right=Case]
-    {\Gamma \vdash t : A \lor B \quad \Gamma, x : A \vdash t_1 : C \quad \Gamma, y : B \vdash t_2 : C}
-    {\Gamma \vdash \text{case } t \ \text{of} \ (\text{inl}_{A \lor B}(x) \Rightarrow t_1 \mid \text{inr}_{A \lor B}(y) \Rightarrow t_2) : C}$$
+$$
+\frac{\Gamma \vdash t : A \lor B \quad \Gamma, x : A \vdash t_1 : C \quad \Gamma, y : B \vdash t_2 : C}{\Gamma \vdash \text{case } t \ \text{of} \ (\text{inl}_{A \lor B}(x) \Rightarrow t_1 \mid \text{inr}_{A \lor B}(y) \Rightarrow t_2) : C} \quad \text{Case}
+$$
+
 
 # Reduction rules
 
@@ -107,15 +105,8 @@ $$\frac{}{\text{fst}(\langle v_1, v_2 \rangle) \rightsquigarrow v_1} \quad \text
 
 $$\frac{}{\text{snd}(\langle v_1, v_2 \rangle) \rightsquigarrow v_2} \quad \text{Eval-Snd}$$
 
-$$\frac{
-    e \rightsquigarrow e'
-}{
-    \text{Inl}(e) \to \text{Inl}(e')
-} \quad \text{Eval-Inl}$$ $$\frac{
-    e \rightsquigarrow e'
-}{
-    \text{Inr}(e) \to \text{Inr}(e')
-} \quad \text{Eval-Inr}$$
+$$\frac{e \rightsquigarrow e'}{\text{Inl}(e) \to \text{Inl}(e')} \quad \text{Eval-Inl}$$ 
+$$\frac{e \rightsquigarrow e'}{\text{Inr}(e) \to \text{Inr}(e')} \quad \text{Eval-Inr}$$
 
 $$\frac{}{\text{case} \ \text{Inl}(v) \ \text{of} \ (\text{Inl}(x) \Rightarrow t_1 \mid \text{Inr}(y) \Rightarrow t_2) \rightsquigarrow t_1[v / x]} \quad \text{Eval-Case-Inl}$$
 
