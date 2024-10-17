@@ -33,15 +33,15 @@ the repository.
 We have the expressions in the STLC with as
 
 $$
-    t ::= x \mid \lambda x: T. t \mid t_1 \ t_2 \mid \text{if } t_1 \ \text{then} \ t_2 \ \text{else} \ t_3 \\
-      \mid \langle t_1, t_2 \rangle \mid \text{fst}(t) \mid \text{snd}(t) \\
-      \mid \text{inl}_{A \lor B}(t) \mid \text{inr}_{A \lor B}(t) \mid \text{case } t \ \text{of} \ (\text{inl}_{A \lor B}(x) \Rightarrow t_1 \mid \text{inr}_{A \lor B}(y) \Rightarrow t_2),
+t ::= x \mid \lambda x: T. t \mid t_1 \ t_2 \mid \text{if } t_1 \ \text{then} \ t_2 \ \text{else} \ t_3 \ \mid \langle t_1, t_2 \rangle \mid \text{fst}(t) \mid \text{snd}(t) \mid \text{inl}_{A \lor B}(t) \mid \text{inr}_{A \lor B}(t) \mid \text{case } t \ \text{of} \ (\text{inl}_{A \lor B}(x) \Rightarrow t_1 \mid \text{inr}_{A \lor B}(y) \Rightarrow t_2)
 $$
 
+
  and the types as 
- $$
-    T ::= \text{Int} \mid \text{Bool} \mid T_1 \to T_2 \mid T_1 \land T_2 \mid T_1 \lor T_2
 $$
+T ::= \text{Int} \mid \text{Bool} \mid T_1 \to T_2 \mid T_1 \land T_2 \mid T_1 \lor T_2
+$$
+
 
 # Type System
 
